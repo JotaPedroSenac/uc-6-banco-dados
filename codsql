@@ -1,0 +1,111 @@
+-- --CREATE database aula0312
+-- -- CREATE TABLE IF NOT EXISTS PRODUTO(
+-- --   ID int primary key,
+-- --   COD varchar(4) NOT NULL UNIQUE,
+-- --   NOME varchar(100) NOT NULL,
+-- --   PRECO real CHECK(PRECO > 0)
+-- -- );
+
+-- -- \dt;
+-- -- \d PRODUTO
+
+-- -- --deletando uma base de dados
+
+-- -- --DROP DATABASE aula0312;
+-- -- --deletando um atabela
+
+-- -- DROP TABLE PRODUTO
+
+-- -- \dt
+
+
+
+-- CREATE TABLE IF NOT EXISTS PROFESSOR(
+--   ID INT PRIMARY KEY,
+--   NOME VARCHAR(60) NOT NULL,
+--   CPF CHAR(11) UNIQUE NOT NULL
+-- );
+
+-- CREATE TABLE IF NOT EXISTS TURMA(
+--   ID INT,
+--   NUMERO INT,
+--   DURACAO_DIAS INT NOT NULL,
+--   ID_PROFESSOR INT,
+--   PRIMARY KEY(ID, NUMERO),
+--   CONSTRAINT fk_prof foreign KEY(ID_PROFESSOR) references PROFESSOR(ID)
+-- );
+
+-- \dt
+
+-- \d PROFESSOR
+-- \d TURMA
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS FORNECEDOR(
+  ID INT PRIMARY KEY,
+  NOME VARCHAR(100) NOT NULL,
+  CIDADE VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS PECA(
+  ID INT PRIMARY KEY,
+  NOME VARCHAR(100) NOT NULL,
+  DESCRICAO TEXT NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS VENDA(
+  ID_FORNECEDOR INT,
+  ID_PECA INT,
+  DATA DATE NOT NULL,
+  QUANTIDADE INT NOT NULL,
+  foreign KEY(ID_FORNECEDOR) references FORNECEDOR(ID),
+  foreign KEY (ID_PECA) references PECA(ID),
+  PRIMARY KEY(ID_FORNECEDOR, ID_PECA)
+);
+
+
+ALTER TABLE FORNECEDOR ADD TELEFONE CHAR(11);
+ALTER TABLE PECA ADD PRECO REAL;
+ALTER TABLE FORNECEDOR DROP CIDADE;
+
+\dt
+
+\d FORNECEDOR
+\d PECA
+\d VENDA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
