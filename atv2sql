@@ -1,0 +1,69 @@
+CREATE TABLE IF NOT EXISTS USUARIOS(
+  id int primary key,
+  nome varchar(60) not null,
+  email varchar(80) unique not null,
+  data_cadastro timestamp default current_timestamp
+);
+
+
+CREATE TABLE IF NOT EXISTS EDITORA(
+  id int primary key,
+  nome_editora varchar(60) NOT NULL unique
+);
+
+CREATE TABLE IF NOT EXISTS GENERO(
+  id int primary key,
+  nome_genero varchar(60) NOT NULL unique
+);
+
+
+CREATE TABLE IF NOT EXISTS LIVROS(
+  id int primary key,
+  id_editora int not null,
+  id_genero int not null,
+  titulo varchar(60) not null,
+  qntd_disponivel int not null check (qntd_disponivel >= 0),
+  CONSTRAINT fk_livros_editora foreign key(id_editora) references EDITORA(id) on delete cascade,
+  CONSTRAINT fk_livros_genero foreign key(id_genero) references GENERO(id) on delete cascade
+);
+
+
+CREATE TABLE IF NOT EXISTS EMPRESTIMOS(
+  id serial primary key,
+  data_emprestimo timestamp default current_timestamp,
+  data_devolucao timestamp not null,
+  id_livro int not null,
+  id_usuario int not null,
+  CONSTRAINT fk_emprestimos_usuarios foreign key(id_livro) references LIVROS(id),
+  CONSTRAINT fk_emprestimos_livros foreign key(id_usuario)references USUARIOS(id)
+  -- constraint check_data_emprestimo_devolucao check (data_emprestimo < data_devolucao)
+);
+
+--
+ALTER TABLE USUARIOS ADD TELEFONE CHAR(11) default 'Nenhum';
+ALTER TABLE LIVROS ALTER COLUMN TITULO TYPE varchar(200);
+--column é mais utilizado
+ALTER TABLE USUARIOS drop COLUMN data_cadastro;
+ALTER TABLE LIVROS ADD constraint uq_livros_titulo_editora UNIQUE(titulo, id_editora);
+ALTER TABLE EMPRESTIMOS ADD CONSTRAINT chk_data_devolucao check(data_devolucao >= data_emprestimo);
+
+insert INTO USUARIOS(id, nome, email)
+VALUES(1, 'Valtemir', 'valtemir@senac.br'), (2, 'Valtemir Junior', 'valtemirjr@senac.br');
+
+insert INTO GENERO(id, nome_genero)
+VALUES(1, 'Romance'), (2, 'Terror');
+
+insert INTO EDITORA(id, nome_editora)
+VALUES(1, 'Atlas'), (2, 'Globo');
+
+\d LIVROS
+
+
+\dt
+
+\d USUARIOS
+\d EMPRESTIMOS
+
+  SELECT * FROM USUARIOS;
+  SELECT * FROM GENERO;
+  SELECT * FROM EDITORA
