@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS GENERO(
 
 
 CREATE TABLE IF NOT EXISTS LIVROS(
-  id int primary key,
+  id serial primary key,
   id_editora int not null,
   id_genero int not null,
   titulo varchar(60) not null,
-  qntd_disponivel int not null check (qntd_disponivel >= 0),
+  qntd_disponivel int not null check (qntd_disponivel > 0),
   CONSTRAINT fk_livros_editora foreign key(id_editora) references EDITORA(id) on delete cascade,
   CONSTRAINT fk_livros_genero foreign key(id_genero) references GENERO(id) on delete cascade
 );
@@ -47,14 +47,25 @@ ALTER TABLE USUARIOS drop COLUMN data_cadastro;
 ALTER TABLE LIVROS ADD constraint uq_livros_titulo_editora UNIQUE(titulo, id_editora);
 ALTER TABLE EMPRESTIMOS ADD CONSTRAINT chk_data_devolucao check(data_devolucao >= data_emprestimo);
 
-insert INTO USUARIOS(id, nome, email)
-VALUES(1, 'Valtemir', 'valtemir@senac.br'), (2, 'Valtemir Junior', 'valtemirjr@senac.br');
+insert INTO USUARIOS(id, nome, email, telefone)
+VALUES(1, 'Valtemir', 'valtemir@senac.br', '9999-9999'), (2, 'Valtemir Junior', 'valtemirjr@senac.br', '9999-9999');
 
 insert INTO GENERO(id, nome_genero)
 VALUES(1, 'Romance'), (2, 'Terror');
 
 insert INTO EDITORA(id, nome_editora)
 VALUES(1, 'Atlas'), (2, 'Globo');
+
+insert INTO LIVROS(titulo, qntd_disponivel, id_editora, id_genero)
+VALUES('Hulk', 2, 1, 1),
+-- ('Vingadores', 0, 2, 1),
+('Hulk', 2, 2, 1),
+('Senhor dos aneis', 4, 1, 2),
+('As transças do rei careca', 10, 2, 1);
+
+insert INTO EMPRESTIMOS(id_usuario, id_livro, data_devolucao)
+VALUES
+(1, 4, '2024-12-06');
 
 \d LIVROS
 
@@ -66,4 +77,6 @@ VALUES(1, 'Atlas'), (2, 'Globo');
 
   SELECT * FROM USUARIOS;
   SELECT * FROM GENERO;
-  SELECT * FROM EDITORA
+  SELECT * FROM EDITORA;
+  SELECT * FROM LIVROS;
+  SELECT * FROM EMPRESTIMOS
