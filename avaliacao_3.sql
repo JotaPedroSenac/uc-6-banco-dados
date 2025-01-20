@@ -8,10 +8,15 @@ GROUP BY unidade.nome;
 
 --2. Quantidade de livros disponíveis em cada unidade.
 
+--criar view
+CREATE VIEW vw_quantidade_livros_disponiveis as
 SELECT unidade.nome, count(livro.id) as total_livros
 FROM livro
 JOIN unidade ON unidade.id = livro.id_unidade
 GROUP BY unidade.nome;
+
+-- chamar view
+select * from vw_quantidade_livros_disponiveis;
 
 --3. Quantidade de empréstimos realizados em cada unidade.
 
@@ -116,3 +121,83 @@ SELECT * FROM emprestimo;
 SELECT * FROM livro;
 SELECT * FROM unidade;
 SELECT * FROM usuario;
+
+
+--- Procedimentos - procedures
+
+create or replace procedure inserir_novo_autor(
+	nome varchar,
+	nacionalidade varchar,
+	data_nascimento date
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO autor(nome, nacionalidade, data_nascimento) 
+VALUES (nome, nacionalidade, data_nascimento)
+$$;
+
+-- procedure - botao direito - scripts - execute (para executar)
+
+call inserir_novo_autor('Nome', 'br', '1990-11-11');
+
+
+-- procedimento para criar nova categoria
+
+create or replace procedure inserir_nova_categoria(
+	nome varchar,
+	descricao text
+)
+LANGUAGE SQL
+AS $$
+INSERT INTO categoria(nome, descricao) 
+VALUES (nome, descricao)
+$$;
+
+call inserir_nova_categoria('ação', 'livros de ação');
+
+
+
+
+-- procedimento de atualização
+
+create or replace procedure update_telefone_unidade(
+	id_unidade integer,
+	telefone_unidade varchar
+) language sql
+as $$
+UPDATE unidade SET telefone = telefone_unidade
+where id = id_unidade
+$$;
+
+
+-- procedimento para atualizar none do usuario
+
+select * from usuario;
+
+create or replace procedure update_nome_usuario(
+	id_usuario integer,
+	nome_usuario varchar
+) language sql
+as $$
+UPDATE usuario SET nome = nome_usuario
+where id = id_usuario
+$$;
+
+-- procedimento para excluir um livro pelo id
+
+select * from livro;
+
+delete from livro where id = 109;
+
+
+create or replace procedure delete_livro(
+	id_livro integer
+) language sql
+as $$
+delete from livro where id = id_livro
+$$;
+
+
+
+--- Funções - functions
+
