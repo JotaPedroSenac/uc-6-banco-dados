@@ -201,3 +201,78 @@ $$;
 
 --- Funções - functions
 
+-- criar uma função para calcular o total de livros
+
+create or replace function total_livros() RETURNS int AS $$
+        BEGIN
+                return (select count(*) as total_livros from livro);
+        END;
+$$ LANGUAGE plpgsql;
+
+-- total de usuarios
+
+create or replace function total_usuarios() RETURNS int AS $$
+	BEGIN
+			return (select count(*) as total_usuarios from usuario);
+	END;
+$$ LANGUAGE plpgsql;
+
+-- crie uma função que retorna todos os usuários
+
+CREATE OR REPLACE FUNCTION listar_usuario_por_id(id_user integer) 
+RETURNS TABLE (
+    id INTEGER, 
+    nome VARCHAR, 
+    email VARCHAR, 
+    telefone VARCHAR, 
+    endereco text, 
+    data_cadastro timestamp
+) 
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT usuario.id, usuario.nome, usuario.email, usuario.telefone, usuario.endereco, usuario.data_cadastro 
+    FROM usuario
+	WHERE usuario.id = id_user;
+END;
+$$ LANGUAGE plpgsql;
+
+-- consultando a função
+select * from listar_usuario_por_id(8);
+
+-- consultando a função
+
+select * from listar_usuarios();
+
+
+--- criar uma função que retorna o livro pelo id
+
+
+SELECT * FROM livro;
+
+
+CREATE OR REPLACE FUNCTION listar_livro_por_id(id_livros integer) 
+RETURNS TABLE (
+    id_livro INTEGER, 
+    titulo_livro VARCHAR, 
+    id_autor_livro INTEGER, 
+    id_categoria_livro  INTEGER, 
+    ano_publicacao_livro INTEGER, 
+	numero_paginas_livro  INTEGER,
+	disponivel_livro  BOOLEAN,
+	id_unidade_livro INTEGER
+) 
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT * 
+    FROM livro
+	WHERE livro.id = id_livros;
+END;
+$$ LANGUAGE plpgsql;
+
+-- consultando a função
+
+select * from listar_livro_por_id(110);
+
+
